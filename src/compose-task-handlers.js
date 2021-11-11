@@ -13,7 +13,10 @@ const callHandler                    = require('./call-handler');
  * @returns {Function} Composed task handlers
  */
 function composeTaskHandlers(options = {}, composedAbortHandlers) {
-  const taskHandlers = options.taskHandlers || [];
+  const {
+    taskHandlers = [],
+    abortHandlers = [],
+  } = options;
 
   return async (...composedTaskArguments) => {
     let exceptionError;
@@ -33,7 +36,9 @@ function composeTaskHandlers(options = {}, composedAbortHandlers) {
     }
 
     catch (error) {
-      exceptionError = composedAbortHandlers(error, payload.context, payload);
+      exceptionError = abortHandlers.length > 0
+        ? composedAbortHandlers(error, payload.context, payload)
+        : error;
     }
 
     /**
@@ -51,7 +56,9 @@ function composeTaskHandlers(options = {}, composedAbortHandlers) {
       }
 
       catch (error) {
-        exceptionError = composedAbortHandlers(error, payload.context, payload);
+        exceptionError = abortHandlers.length > 0
+          ? composedAbortHandlers(error, payload.context, payload)
+          : error;
       }
     }
 
