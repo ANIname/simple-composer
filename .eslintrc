@@ -1,0 +1,62 @@
+{
+  "env": {
+    "jest/globals": true,
+    "node": true,
+    "es6": true
+  },
+
+  "parserOptions": {
+    "ecmaVersion": 2021,
+		"sourceType": "module"
+  },
+
+  "extends": [
+    "airbnb-base",
+    "plugin:jsdoc/recommended",
+    "plugin:lodash/recommended",
+    "plugin:import/recommended",
+    "plugin:sonarjs/recommended",
+    "plugin:unicorn/recommended",
+    "plugin:security/recommended",
+    "plugin:eslint-comments/recommended",
+    "plugin:jsonc/recommended-with-json"
+  ],
+
+  "plugins": [
+    "write-good-comments",
+    "align-assignments",
+    "no-secrets",
+    "security",
+    "sonarjs",
+    "unicorn",
+    "import",
+    "jsdoc",
+    "lodash",
+    "jest"
+  ],
+
+  "ignorePatterns": ["package*.json"],
+
+  "rules": {
+    "no-multi-spaces": "off",
+    "no-use-before-define": "off",
+    "unicorn/prefer-module": "off",
+
+    "security/detect-object-injection": "off",
+    "security/detect-child-process": "off",
+    "security/detect-non-literal-fs-filename": "off",
+    "security/detect-unsafe-regex": "off",
+
+    "brace-style": ["error", "stroustrup"],
+    "no-param-reassign": ["error", { "props": false }],
+    "max-len": ["error", { "code": 120, "ignoreComments": true, "ignorePattern": ".*require.*" }],
+    "no-console": ["error", { "allow": ["info", "warn", "error", "table", "group", "groupEnd"] }],
+    "key-spacing": ["error", { "align": { "beforeColon": false, "afterColon": true, "on": "value" } }],
+    "align-assignments/align-assignments": ["error", { "requiresOnly": false } ],
+
+    "jsonc/auto": "error",
+    "no-secrets/no-secrets": "error",
+
+    "write-good-comments/write-good-comments": "warn"
+  }
+}
