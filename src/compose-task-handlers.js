@@ -1,5 +1,4 @@
-const map         = require('lodash/map');
-const isUndefined = require('lodash/isUndefined');
+const map = require('lodash/map');
 
 const prepareHandlersIteratorCounter = require('./prepare-handlers-iterator-counter');
 const callHandler                    = require('./call-handler');
@@ -21,9 +20,8 @@ function composeTaskHandlers(options = {}, composedAbortHandlers) {
   return async (...composedTaskArguments) => {
     let exceptionError;
 
-    const parent  = {}; // After handler execution - we put result to parent. It's necessary if function is the last in the list and returns nothing
     const context = {}; // Context needed to transfer data from one handler to another
-    const payload = { context, parent, arguments: composedTaskArguments };
+    const payload = { context, arguments: composedTaskArguments };
 
     context.handlersIteratorCounter = 0;
     context.composedTaskOptions     = options;
@@ -62,11 +60,7 @@ function composeTaskHandlers(options = {}, composedAbortHandlers) {
       }
     }
 
-    if (exceptionError) return exceptionError;
-
-    return !isUndefined(context.taskHandlersResult)
-      ? context.taskHandlersResult
-      : payload.parent;
+    return exceptionError || context.taskHandlersResult;
   };
 }
 

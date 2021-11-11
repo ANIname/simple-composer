@@ -15,8 +15,6 @@ function composeAbortHandlers(options = {}) {
   const abortHandlers = options.abortHandlers || [];
 
   return async (error, context, payload) => {
-    payload.parent = {};
-
     context.handlersIteratorCounter = 0;
     context.exceptionError          = error;
     context.composedTaskOptions     = options;
@@ -39,9 +37,7 @@ function composeAbortHandlers(options = {}) {
       await callHandler(options, context, payload, next);
     }
 
-    if (!isUndefined(context.abortHandlersResult)) throw context.abortHandlersResult;
-
-    throw !isUndefined(payload.parent) ? payload.parent : error;
+    throw !isUndefined(context.abortHandlersResult) ? context.abortHandlersResult : error;
   };
 }
 

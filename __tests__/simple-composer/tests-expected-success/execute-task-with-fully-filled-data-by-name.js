@@ -28,7 +28,7 @@ module.exports = async () => {
   expect(consoleWarnSpy.mock.calls.length).toBe(0);
   expect(consoleErrorSpy.mock.calls.length).toBe(0);
 
-  expect(consoleInfoArguments2[3]).toEqual({});
+  expect(consoleInfoArguments2[3]).toEqual(undefined);
 
   expect(consoleInfoArguments3[3]).toBe('PARENT TEST MESSAGE');
   expect(consoleInfoArguments4[2]).toBe('context before transformation:');
