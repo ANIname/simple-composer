@@ -1,7 +1,7 @@
 const map = require('lodash/map');
 
 const prepareHandlersIteratorCounter = require('./prepare-handlers-iterator-counter');
-const callHandler                    = require('./call-handler');
+const callHandler = require('./call-handler');
 
 /**
  * Compose task handlers
@@ -18,15 +18,15 @@ function composeTaskHandlers(options = {}, composedAbortHandlers) {
   } = options;
 
   return async (...composedTaskArguments) => {
-    let exceptionError;
+    let abortHandlersResult
 
     const context = {}; // Context needed to transfer data from one handler to another
     const payload = { context, arguments: composedTaskArguments };
 
     context.handlersIteratorCounter = 0;
-    context.composedTaskOptions     = options;
-    context.state                   = 'task';
-    context.taskHandlersNames       = map(taskHandlers, 'name');
+    context.composedTaskOptions = options;
+    context.state = 'task';
+    context.taskHandlersNames = map(taskHandlers, 'name');
 
     try {
       // Call the first task handler
@@ -34,9 +34,13 @@ function composeTaskHandlers(options = {}, composedAbortHandlers) {
     }
 
     catch (error) {
-      exceptionError = abortHandlers.length > 0
-        ? composedAbortHandlers(error, payload.context, payload)
-        : error;
+      if (abortHandlers.length > 0) {
+        abortHandlersResult = composedAbortHandlers(error, payload.context, payload)
+      }
+
+      else {
+        throw error
+      }
     }
 
     /**
@@ -54,13 +58,17 @@ function composeTaskHandlers(options = {}, composedAbortHandlers) {
       }
 
       catch (error) {
-        exceptionError = abortHandlers.length > 0
-          ? composedAbortHandlers(error, payload.context, payload)
-          : error;
+        if (abortHandlers.length > 0) {
+          abortHandlersResult = composedAbortHandlers(error, payload.context, payload)
+        }
+
+        else {
+          throw error
+        }
       }
     }
 
-    return exceptionError || context.taskHandlersResult;
+    return abortHandlersResult || context.taskHandlersResult;
   };
 }
 
