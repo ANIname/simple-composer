@@ -15,12 +15,18 @@ function composeTaskHandlers(options = {}, composedAbortHandlers) {
   const {
     taskHandlers = [],
     abortHandlers = [],
+
+    useContextFromInputArgumentsIndex,
   } = options;
 
   return async (...composedTaskArguments) => {
     let abortHandlersResult;
 
-    const context = {}; // Context needed to transfer data from one handler to another
+    // Context needed to transfer data from one handler to another
+    const context = useContextFromInputArgumentsIndex
+      ? composedTaskArguments[useContextFromInputArgumentsIndex]
+      : {};
+
     const payload = { context, arguments: composedTaskArguments };
 
     context.handlersIteratorCounter = 0;

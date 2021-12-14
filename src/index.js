@@ -11,6 +11,11 @@ const composedTasksHandlers = {};
  * @param {string} options.taskName - Name of the task
  * @param {Function[]} options.taskHandlers - Handlers run one by one, when this task called
  * @param {Function[]} options.abortHandlers - Handlers run one by one, when task throw exception
+ * @param {number} options.useContextFromInputArgumentsIndex - You can choose which of the input arguments you want to use to form the context.
+ *  If not specified - context will be form from scratch
+ *  Example: In graphQL resolvers we have 4 input arguments (parent, args, context, info). You can choose graphQL context to form task context by specifying the index of input argument.
+ *  Example: 2
+ *_
  * @returns {Function} Composed task handlers
  * @example
  *
