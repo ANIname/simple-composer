@@ -1,7 +1,7 @@
 {
   "name": "simple-composer",
   "description": "Task composer",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "keywords": [
     "simple",
     "composer",
@@ -51,6 +51,7 @@
   },
   "dependencies": {
     "lodash": "^4.17.21",
+    "nunjucks": "^3.2.3",
     "uuid": "^8.3.2"
   }
 }

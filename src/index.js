@@ -1,6 +1,8 @@
-const uuid                 = require('uuid');
+const uuid = require('uuid');
+
 const composeAbortHandlers = require('./compose-abort-handlers');
 const composeTaskHandlers  = require('./compose-task-handlers');
+const universalFunctions   = require('./universal-functions');
 
 const composedTasksHandlers = {};
 
@@ -55,4 +57,4 @@ function compose(options = {}) {
   return composedTaskHandlers;
 }
 
-module.exports = { compose, composedTasksHandlers };
+module.exports = { compose, composedTasksHandlers, universalFunctions };
