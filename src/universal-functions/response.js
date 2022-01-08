@@ -10,11 +10,17 @@ function universalResponse(data) {
   const stringifiedResponseData = JSON.stringify(data);
   const compiledResponseData    = nunjucks.compile(stringifiedResponseData);
 
-  return (payload) => {
+  /**
+   * @param {object} payload - Universal function context
+   * @returns {*} data from payload
+   */
+  function universalFunction(payload) {
     const renderedResponseData = compiledResponseData.render(payload);
 
     return nunjucks.JSONparseTemplateString(renderedResponseData);
-  };
+  }
+
+  return universalFunction;
 }
 
 module.exports = universalResponse;

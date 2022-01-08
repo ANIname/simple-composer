@@ -1,3 +1,5 @@
+const isFunction = require('lodash/isFunction');
+
 const nunjucks = require('../../services/nunjucks');
 
 /**
@@ -15,20 +17,24 @@ function throwIfTrue(stringTemplateExpression, ErrorInstance = Error, ...errorPa
   const compiledConditionExpression = nunjucks.compile(stringTemplateExpression);
   const compiledErrorParameters     = nunjucks.compile(stringifiedErrorParameters);
 
-  return (payload, next) => {
+  /**
+   * @param {object} payload - Universal function context
+   * @param {Function|undefined} next - Next function in composed task
+   * @returns {Function} call next function
+   */
+  function universalFunction(payload, next) {
     const renderedConditionExpression = compiledConditionExpression.render(payload);
     const renderedErrorParameters     = compiledErrorParameters.render(payload);
     const parsedErrorParameters       = nunjucks.JSONparseTemplateString(renderedErrorParameters);
-
-    console.info('tes', stringTemplateExpression);
-    console.info('test', renderedConditionExpression);
 
     if (renderedConditionExpression !== 'false') {
       throw new ErrorInstance(...parsedErrorParameters);
     }
 
-    return next();
-  };
+    return isFunction(next) ? next() : undefined;
+  }
+
+  return universalFunction;
 }
 
 module.exports = throwIfTrue;

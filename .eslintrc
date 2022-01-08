@@ -38,6 +38,7 @@
   "ignorePatterns": ["package*.json"],
 
   "rules": {
+    "no-continue": "off",
     "no-multi-spaces": "off",
     "no-use-before-define": "off",
     "unicorn/prefer-module": "off",
