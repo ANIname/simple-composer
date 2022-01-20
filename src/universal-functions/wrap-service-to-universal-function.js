@@ -1,9 +1,25 @@
 const { promisify } = require('util');
-const set           = require('lodash/set');
-const castPath      = require('lodash/_castPath');
-const isFunction    = require('lodash/isFunction');
+
+const isFunction = require('lodash/isFunction');
+const isString   = require('lodash/isString');
+const castPath   = require('lodash/_castPath');
+const toString   = require('lodash/toString');
+const isNil      = require('lodash/isNil');
+const set        = require('lodash/set');
 
 const nunjucks = require('../../services/nunjucks');
+
+const environment = nunjucks.configure({
+  trimBlocks: true,
+});
+
+// TODO test
+environment.addFilter('stringOrNull', (string) => {
+  if (isString(string) && string.length > 0) return string;
+  if (isNil(string)) return null;  // eslint-disable-line unicorn/no-null
+
+  return toString(string);
+});
 
 /**
  * Wrap service to universal function, for use composed task payload
@@ -44,7 +60,7 @@ function wrapServiceToUniversalFunction(parameters) {
    */
   function universalFunctionWizard(callFunctionPath, ...callFunctionArguments) {
     const stringifiedOperationParameters = JSON.stringify(callFunctionArguments);
-    const compiledOperationParameters    = nunjucks.compile(stringifiedOperationParameters);
+    const compiledOperationParameters    = nunjucks.compile(stringifiedOperationParameters, environment);
     const operationPath                  = `${serviceName}.${callFunctionPath}`;
 
     /**
@@ -73,6 +89,11 @@ function wrapServiceToUniversalFunction(parameters) {
       set(payload, `context.${operationPath}.result`, operationResult);
       set(payload, `context.${operationPath}.parameters.beforeTransformation`, callFunctionArguments);
       set(payload, `context.${operationPath}.parameters.afterTransformation`, operationParameters);
+
+      set(payload, `context.${serviceName}.lastOperation.result`, operationResult);
+      set(payload, `context.${serviceName}.lastOperation.operationPath`, operationPath);
+      set(payload, `context.${serviceName}.lastOperation.parameters.beforeTransformation`, callFunctionArguments);
+      set(payload, `context.${serviceName}.lastOperation.parameters.afterTransformation`, operationParameters);
 
       if (debug) console.info('♻️', `context.${operationPath}.result`, operationResult);
 
