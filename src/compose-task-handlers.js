@@ -35,6 +35,9 @@ function composeTaskHandlers(options = {}, composedAbortHandlers) {
     context.composedTaskArguments   = composedTaskArguments
     context.taskHandlersNames       = map(taskHandlers, 'name');
 
+    context.composedTasksArguments = context.composedTasksArguments || []
+    context.composedTasksArguments.push(composedTaskArguments)
+
     try {
       // Call the first task handler
       await callHandler(options, context, payload, next);
