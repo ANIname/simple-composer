@@ -57,7 +57,7 @@ function wrapServiceToUniversalFunction(parameters) {
    * @param {string} callFunctionPath - Path to target operation in service object
    * @param {...any} callFunctionArguments - Arguments for target operation
    * @returns {Function} Universal function
-   */
+   */ // TODO add ability to custom save operation path
   function universalFunctionWizard(callFunctionPath, ...callFunctionArguments) {
     const stringifiedOperationParameters = JSON.stringify(callFunctionArguments);
     const compiledOperationParameters    = nunjucks.compile(stringifiedOperationParameters, environment);

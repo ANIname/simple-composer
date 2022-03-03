@@ -30,8 +30,9 @@ function composeTaskHandlers(options = {}, composedAbortHandlers) {
     const payload = { context, arguments: composedTaskArguments };
 
     context.handlersIteratorCounter = 0;
-    context.composedTaskOptions     = options;
     context.state                   = 'task';
+    context.composedTaskOptions     = options;
+    context.composedTaskArguments   = composedTaskArguments
     context.taskHandlersNames       = map(taskHandlers, 'name');
 
     try {

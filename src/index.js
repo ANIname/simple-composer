@@ -45,6 +45,7 @@ function compose(options = {}) {
   options.taskHandlers  = options.taskHandlers || [];
   options.abortHandlers = options.abortHandlers || [];
 
+  // TODO add ability to skip overwrite
   if (composedTasksHandlers[taskName]) {
     console.warn(`⚠️ Duplicate task ${taskName} found! The task will be overwritten!`);
   }
