@@ -1,3 +1,4 @@
+const split = require('lodash/split');
 const map = require('lodash/map');
 const get = require('lodash/get');
 
@@ -31,7 +32,14 @@ function composeTaskHandlers(options = {}, composedAbortHandlers) {
     }
 
     if (useContextFromInputArgumentsPath) {
-      context = { ...context, ...get(composedTaskArguments, useContextFromInputArgumentsPath) };
+      const inputArgumentsPathArray = split(useContextFromInputArgumentsPath, '.')
+      const inputArgumentsPathLastIndex = inputArgumentsPathArray[inputArgumentsPathArray.length - 1];
+
+      context = {
+        ...context,
+
+        [inputArgumentsPathLastIndex]: get(composedTaskArguments, useContextFromInputArgumentsPath)
+      };
     }
 
     const payload = { context, arguments: composedTaskArguments };
