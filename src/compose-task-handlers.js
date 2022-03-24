@@ -1,4 +1,5 @@
 const map = require('lodash/map');
+const get = require('lodash/get');
 
 const prepareHandlersIteratorCounter = require('./prepare-handlers-iterator-counter');
 const callHandler                    = require('./call-handler');
@@ -7,8 +8,7 @@ const callHandler                    = require('./call-handler');
  * Compose task handlers
  *
  * @param {object} options Compose task handlers options
- * @param {Function[]} options.taskHandlers - Handlers run one by one, when this task called
- * @param {Function} composedAbortHandlers - Abort handlers run when task throw exception
+ * @param {Function} composedAbortHandlers Handlers run one by one, when task throw exception
  * @returns {Function} Composed task handlers
  */
 function composeTaskHandlers(options = {}, composedAbortHandlers) {
@@ -17,26 +17,33 @@ function composeTaskHandlers(options = {}, composedAbortHandlers) {
     abortHandlers = [],
 
     useContextFromInputArgumentsIndex,
+    useContextFromInputArgumentsPath,
   } = options;
 
   return async (...composedTaskArguments) => {
     let abortHandlersResult;
 
     // Context needed to transfer data from one handler to another
-    const context = useContextFromInputArgumentsIndex
-      ? composedTaskArguments[useContextFromInputArgumentsIndex]
-      : {};
+    let context = {};
+
+    if (useContextFromInputArgumentsIndex) {
+      context = { ...context, ...composedTaskArguments[useContextFromInputArgumentsIndex] };
+    }
+
+    if (useContextFromInputArgumentsPath) {
+      context = { ...context, ...get(composedTaskArguments, useContextFromInputArgumentsPath) };
+    }
 
     const payload = { context, arguments: composedTaskArguments };
 
     context.handlersIteratorCounter = 0;
     context.state                   = 'task';
     context.composedTaskOptions     = options;
-    context.composedTaskArguments   = composedTaskArguments
+    context.composedTaskArguments   = composedTaskArguments;
     context.taskHandlersNames       = map(taskHandlers, 'name');
 
-    context.composedTasksArguments = context.composedTasksArguments || []
-    context.composedTasksArguments.push(composedTaskArguments)
+    context.composedTasksArguments = context.composedTasksArguments || [];
+    context.composedTasksArguments.push(composedTaskArguments);
 
     try {
       // Call the first task handler
