@@ -17,7 +17,11 @@ function universalResponse(data) {
   function universalFunction(payload) {
     const renderedResponseData = compiledResponseData.render(payload);
 
-    return nunjucks.JSONparseTemplateString(renderedResponseData);
+    const response = nunjucks.JSONparseTemplateString(renderedResponseData);
+
+    console.info('↪️', 'context.universalResponse.response', response);
+
+    return response;
   }
 
   return universalFunction;
