@@ -38,6 +38,8 @@
   "ignorePatterns": ["package*.json"],
 
   "rules": {
+    "linebreak-style": "off",
+
     "no-continue": "off",
     "no-multi-spaces": "off",
     "no-use-before-define": "off",
