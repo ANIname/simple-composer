@@ -14,11 +14,7 @@ function JSONparseTemplateString(string) {
 
   return JSON.parse(preparedString, (key, value) => {
     try {
-      let preparedValue = value;
-
-      preparedValue = replace(preparedValue, /\n/g, '\\n');
-      preparedValue = replace(preparedValue, /\t/g, '\\t');
-      preparedValue = replace(preparedValue, /&quot;/g, '"');
+      const preparedValue = fixSpecialChars(value);
 
       return JSON.parse(preparedValue);
     }
@@ -27,6 +23,23 @@ function JSONparseTemplateString(string) {
       return value;
     }
   });
+}
+
+/**
+ * For correct json parsing, replace special chars
+ *
+ * @param {string} value - String to fix
+ * @returns {string} Fixed string
+ */
+function fixSpecialChars(value) {
+  let preparedValue = value;
+
+  preparedValue = replace(preparedValue, /\n/g, '\\n');      // \n        -> \\n
+  preparedValue = replace(preparedValue, /\t/g, '\\t');      // \t        -> \\t
+  preparedValue = replace(preparedValue, /&quot;/g, '"');    // &quot;    -> "
+  preparedValue = replace(preparedValue, /&amp;#39;/g, "'"); // &amp;#39; -> '
+
+  return preparedValue;
 }
 
 module.exports = {
