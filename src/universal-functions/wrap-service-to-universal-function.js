@@ -78,15 +78,29 @@ function wrapServiceToUniversalFunction(parameters) {
 
       if (debug) console.info('♻️', `context.${operationPath}.parameters.afterTransformation`, operationParameters);
 
-      const operationResult = await callOperation({
-        debug,
-        service,
-        operationPath,
-        shouldPromisify,
-        operationParameters,
-        callFunctionPathKeys,
-        shouldUseNativeReturnPromise,
-      });
+      let operationResult;
+
+      try {
+        operationResult = await callOperation({
+          debug,
+          service,
+          operationPath,
+          shouldPromisify,
+          operationParameters,
+          callFunctionPathKeys,
+          shouldUseNativeReturnPromise,
+        });
+      }
+
+      catch (error) {
+        const { message, stack, ...otherErrorData } = error;
+
+        if (debug) {
+          console.error('♻️', `context.${operationPath}.error`, { message, stack, ...otherErrorData }, error);
+        }
+
+        throw error;
+      }
 
       set(payload, `context.${operationPath}.result`, operationResult);
       set(payload, `context.${operationPath}.parameters.beforeTransformation`, callFunctionArguments);
