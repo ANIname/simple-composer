@@ -79,7 +79,9 @@ function wrapServiceToUniversalFunction(parameters) {
       if (debug) console.info('♻️', `context.${operationPath}.parameters.afterTransformation`, operationParameters);
 
       const operationResult = await callOperation({
+        debug,
         service,
+        operationPath,
         shouldPromisify,
         operationParameters,
         callFunctionPathKeys,
@@ -115,7 +117,9 @@ function wrapServiceToUniversalFunction(parameters) {
  */
 async function callOperation(parameters) {
   const {
+    debug,
     service,
+    operationPath,
     shouldPromisify,
     operationParameters,
     callFunctionPathKeys,
@@ -132,6 +136,18 @@ async function callOperation(parameters) {
       object = object[callFunctionPathKeys[index]];
 
       continue;
+    }
+
+    if (debug) {
+      console.info('♻️', `context.${operationPath} call...`, {
+        debug,
+        service,
+        operationPath,
+        shouldPromisify,
+        operationParameters,
+        callFunctionPathKeys,
+        shouldUseNativeReturnPromise,
+      });
     }
 
     if (shouldPromisify) {
