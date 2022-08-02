@@ -37,9 +37,7 @@ function fixSpecialChars(value) {
   preparedValue = replace(preparedValue, /\n/g, '\\n');      // \n        -> \\n
   preparedValue = replace(preparedValue, /\t/g, '\\t');      // \t        -> \\t
   preparedValue = replace(preparedValue, /&quot;/g, '"');    // &quot;    -> "
-
-  preparedValue = replace(preparedValue, /&amp;/g, '&');
-
+  preparedValue = replace(preparedValue, /&amp;/g, '&');     // &amp;     -> &
   preparedValue = replace(preparedValue, /&amp;#39;/g, "'"); // &amp;#39; -> '
   preparedValue = replace(preparedValue, /&#39;/g, "'");     // &;#39;    -> '
 
