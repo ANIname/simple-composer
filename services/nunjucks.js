@@ -1,5 +1,6 @@
 const nunjucks = require('nunjucks');
 const replace  = require('lodash/replace');
+const isNumber = require('lodash/isNumber');
 
 /**
  * Parse template string to JSON
@@ -16,7 +17,9 @@ function JSONparseTemplateString(string) {
     try {
       const preparedValue = fixSpecialChars(value);
 
-      return JSON.parse(preparedValue);
+      const result = JSON.parse(preparedValue);
+
+      return isNumber(result) ? preparedValue : result;
     }
 
     catch {
@@ -37,7 +40,9 @@ function fixSpecialChars(value) {
   preparedValue = replace(preparedValue, /\n/g, '\\n');      // \n        -> \\n
   preparedValue = replace(preparedValue, /\t/g, '\\t');      // \t        -> \\t
   preparedValue = replace(preparedValue, /&quot;/g, '"');    // &quot;    -> "
-  preparedValue = replace(preparedValue, /&amp;/g, '&');     // &amp;     -> &
+
+  preparedValue = replace(preparedValue, /&amp;/g, '&');
+
   preparedValue = replace(preparedValue, /&amp;#39;/g, "'"); // &amp;#39; -> '
   preparedValue = replace(preparedValue, /&#39;/g, "'");     // &;#39;    -> '
 
