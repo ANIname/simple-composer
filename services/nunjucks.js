@@ -19,7 +19,7 @@ function JSONparseTemplateString(string) {
 
       const result = JSON.parse(preparedValue);
 
-      return isNumber(result) ? preparedValue : result;
+      return isNumber(result) ? value : result;
     }
 
     catch {
