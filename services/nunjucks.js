@@ -29,6 +29,19 @@ function JSONparseTemplateString(string) {
 }
 
 /**
+ * Same as JSON.stringify, but converts BigInts to Numbers.
+ *
+ * @param {*} value A JavaScript value, an object or array, to convert.
+ * @returns {string} A JSON string representing the given value.
+ */
+function JSONstringify(value) {
+  return JSON.stringify(value, (replacerKey, replacerValue) => (
+    // eslint-disable-next-line lodash/prefer-lodash-typecheck
+    typeof replacerValue === 'bigint' ? Number(value) : value
+  ));
+}
+
+/**
  * For correct json parsing, replace special chars
  *
  * @param {string} value - String to fix
@@ -51,5 +64,6 @@ function fixSpecialChars(value) {
 
 module.exports = {
   JSONparseTemplateString,
+  JSONstringify,
   ...nunjucks,
 };

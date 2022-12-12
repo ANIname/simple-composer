@@ -13,7 +13,7 @@ const nunjucks = require('../../services/nunjucks');
  * @returns {Function} Universal function.
  */
 function throwIfTrue(stringTemplateExpression, ErrorInstance = Error, ...errorParameters) {
-  const stringifiedErrorParameters  = JSON.stringify(errorParameters);
+  const stringifiedErrorParameters  = nunjucks.JSONstringify(errorParameters);
   const compiledConditionExpression = nunjucks.compile(stringTemplateExpression);
   const compiledErrorParameters     = nunjucks.compile(stringifiedErrorParameters);
 

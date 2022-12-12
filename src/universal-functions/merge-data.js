@@ -12,7 +12,7 @@ const nunjucks = require('../../services/nunjucks');
  * @returns {Function} universal function
  */
 function mergeData(variableDestinationPath, ...sources) {
-  const stringifiedSources = JSON.stringify(sources);
+  const stringifiedSources = nunjucks.JSONstringify(sources);
   const compiledSources    = nunjucks.compile(stringifiedSources);
 
   /**

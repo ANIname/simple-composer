@@ -59,7 +59,7 @@ function wrapServiceToUniversalFunction(parameters) {
    * @returns {Function} Universal function
    */ // TODO add ability to custom save operation path
   function universalFunctionWizard(callFunctionPath, ...callFunctionArguments) {
-    const stringifiedOperationParameters = JSON.stringify(callFunctionArguments);
+    const stringifiedOperationParameters = nunjucks.JSONstringify(callFunctionArguments);
     const compiledOperationParameters    = nunjucks.compile(stringifiedOperationParameters, environment);
     const operationPath                  = `${serviceName}.${callFunctionPath}`;
 
@@ -152,17 +152,7 @@ async function callOperation(parameters) {
       continue;
     }
 
-    if (debug) {
-      console.info('♻️', `context.${operationPath} call...`, {
-        debug,
-        service,
-        operationPath,
-        shouldPromisify,
-        operationParameters,
-        callFunctionPathKeys,
-        shouldUseNativeReturnPromise,
-      });
-    }
+    if (debug) console.info('♻️', `context.${operationPath} call...`);
 
     if (shouldPromisify) {
       operationResult = promisify(object[callFunctionPathKeys[index]])(...operationParameters);

@@ -7,7 +7,7 @@ const nunjucks = require('../../services/nunjucks');
  * @returns {Function} universal function
  */
 function universalResponse(data) {
-  const stringifiedResponseData = JSON.stringify(data);
+  const stringifiedResponseData = nunjucks.JSONstringify(data);
   const compiledResponseData    = nunjucks.compile(stringifiedResponseData);
 
   /**
