@@ -37,7 +37,7 @@ function JSONparseTemplateString(string) {
 function JSONstringify(value) {
   return JSON.stringify(value, (replacerKey, replacerValue) => (
     // eslint-disable-next-line lodash/prefer-lodash-typecheck
-    typeof replacerValue === 'bigint' ? Number(value) : value
+    typeof replacerValue === 'bigint' ? Number(replacerValue) : replacerValue
   ));
 }
 
