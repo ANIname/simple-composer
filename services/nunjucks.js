@@ -1,3 +1,4 @@
+const he       = require('he')
 const nunjucks = require('nunjucks');
 const replace  = require('lodash/replace');
 const isNumber = require('lodash/isNumber');
@@ -11,11 +12,11 @@ const isNumber = require('lodash/isNumber');
 function JSONparseTemplateString(string) {
   let preparedString = string;
 
-  preparedString = replace(preparedString, /\n/g, '\\n');
+  preparedString = replace(preparedString, /&amp;#92;/g, '&#92;');
 
   return JSON.parse(preparedString, (key, value) => {
     try {
-      const preparedValue = fixSpecialChars(value);
+      const preparedValue = he.decode(value);
 
       const result = JSON.parse(preparedValue);
 
@@ -39,27 +40,6 @@ function JSONstringify(value) {
     // eslint-disable-next-line lodash/prefer-lodash-typecheck
     typeof replacerValue === 'bigint' ? Number(replacerValue) : replacerValue
   ));
-}
-
-/**
- * For correct json parsing, replace special chars
- *
- * @param {string} value - String to fix
- * @returns {string} Fixed string
- */
-function fixSpecialChars(value) {
-  let preparedValue = value;
-
-  preparedValue = replace(preparedValue, /\n/g, '\\n');      // \n        -> \\n
-  preparedValue = replace(preparedValue, /\t/g, '\\t');      // \t        -> \\t
-  preparedValue = replace(preparedValue, /&quot;/g, '"');    // &quot;    -> "
-
-  preparedValue = replace(preparedValue, /&amp;/g, '&');
-
-  preparedValue = replace(preparedValue, /&amp;#39;/g, "'"); // &amp;#39; -> '
-  preparedValue = replace(preparedValue, /&#39;/g, "'");     // &;#39;    -> '
-
-  return preparedValue;
 }
 
 module.exports = {
