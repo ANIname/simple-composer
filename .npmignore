@@ -1,24 +1,23 @@
+# Source code
+dist/utils
+dist/src
+test/
+src/
+*.ts
+*.tsx
+Makefile
+
+# Configuration files
+.eslintrc
+.prettierrc
+.gitignore
+tsconfig.json
 .editorconfig
-.gitattributes
-.git
+
+# Editor files
+.vscode/
 .idea
 .DS_Store
-.gitignore
-.github
-.eslintrc
-.nyc_output
-coverage/
-tools/
-CODE_OF_CONDUCT.md
-CONTRIBUTING.md
-.dependabot
-.vscode
-.clinic
 
-media
-__tests__
-jest.config.js
-
-README.md
-
-package-lock.json
+# Etc
+LICENSE
